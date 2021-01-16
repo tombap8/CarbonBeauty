@@ -1,0 +1,206 @@
+// 카본뷰티 메인 페이지 JS - main.js ////
+// 로딩구역 ///
+
+// DOMContentLoaded 이벤트 - html랜더링 시
+window.addEventListener("DOMContentLoaded",
+    function () {
+        console.log("로딩완료!!!");
+
+        // 부드러운 스크롤 함수 호출!
+        startSS();
+
+
+
+        // 배너버튼 마우스 오버/아웃시 class넣기/빼기
+        // 대상선정: .banbtn
+        var bbn = document.querySelector(".banbtn");
+        // 마우스 오버시(.on넣고 .off빼기)
+        bbn.onmouseover = function () {
+            //this는 나자신(.banbtn)
+            this.classList.add("on");
+            this.classList.remove("off");
+        }; //// mouseover ///////////////
+        // 마우스 아웃시(.off넣고 .on빼기)
+        bbn.onmouseout = function () {
+            //this는 나자신(.banbtn)
+            this.classList.add("off");
+            this.classList.remove("on");
+        }; //// mouseout ///////////////
+
+
+        ///////////////////////////////////////////////
+        //////////// 패럴렉스 적용하기 ///////////////////
+        ///// Vanilla JS - rellax.js 순수 JS개발코딩 ////
+        // 깃허브 - https://github.com/dixonandmoe/rellax
+        // 데모 - https://dixonandmoe.com/rellax/
+        ////////////////////////////////////////////////
+        // 배너버튼    
+        var rellax = new Rellax('.rellax', {
+            speed: -2
+        }); /////// rellax /////////////
+
+        // 상품박스 양쪽
+        var rellax2 = new Rellax('.rellax2', {
+            speed: 5
+        });
+        // 상품박스 중앙
+        var rellax3 = new Rellax('.rellax3', {
+            speed: -2
+        });
+
+
+        ////// 상품리스트 드래그하기! ///////
+        // 대상선정: .gdsec>ul
+        $(".gdsec>ul").draggable({
+            axis: "x" //x축고정
+        });
+
+        /// 마우스버튼 클릭할때 이벤트 체크하여 
+        /// 리스트 슬라이드 이동하기
+        // 대상: .gdsec
+        // 이벤트: mouseup (마우스왼쪽버튼을 눌렀다가 땔때 발생)
+        //         mouseleave (마우스가 영역을 벗어날때 발생)
+        // on(이벤트명, 함수)
+        // 이벤트명에 띄어쓰기로 여러이벤트를 사용할 수 있다!
+
+
+        // 상품리스트박스 크기(슬라이드 하나의 단위!)
+        var gw = $(".gdsec").width();
+        console.log("기본크기:" + gw);
+
+        $(".gdsec").on("mouseup mouseleave", function () {
+            // 1. 이벤트확인
+            console.log("나야나!")
+
+            // 이동대상의 위치값
+            // offset() 은 화면기준  left값
+            // position() 은 부모박스 기준  left값을 리턴함!
+            var tgpos = $(".gdsec>ul").position().left;
+            console.log("위치값:" + tgpos);
+
+            // 2. 위치값 확인하여 이동하기
+
+            // 2페이지로 이동하기 ///////////////////
+            if (
+                (tgpos < -gw * 0.1 && tgpos > -gw * 0.5) ||
+                (tgpos < -gw * 1.5 && tgpos > -gw * 1.9)
+            ) {
+                $(".gdsec>ul").animate({
+                    left: "-100%"
+                }, 800);
+            } /////// if ////////////////
+
+            // 3페이지로 이동하기 /////////////////
+            else if (
+                tgpos < -gw * 1.1 && tgpos > -gw * 1.5
+            ) {
+                $(".gdsec>ul").animate({
+                    left: "-200%"
+                }, 800);
+            } /////// if ////////////////
+
+            // 1페이지로 이동하기 //////////////////
+            else if (
+                tgpos < -gw * 0.5 && tgpos > -gw * 0.9
+            ) {
+                $(".gdsec>ul").animate({
+                    left: "0%"
+                }, 800);
+            } /////// if ////////////////
+
+
+            // 1페이지로 고정하기 //////////////////
+            else if (
+                tgpos > 0
+            ) {
+                $(".gdsec>ul").animate({
+                    left: "0%"
+                }, 400);
+            } /////// if ////////////////
+
+            // 3페이지로 고정하기 //////////////////
+            else if (
+                tgpos < -2 * gw
+            ) {
+                $(".gdsec>ul").animate({
+                    left: "-200%"
+                }, 400);
+            } /////// if ////////////////
+
+
+
+
+            // 그밖에 자기자리로 돌아오기! ////////
+            else {
+
+                // 단위 크기로 나눈수를 양수로 만들고 반올림하여
+                // 결과적으로 0,1,2중 하나의 수만 나오게 함!
+                var num = Math.round(Math.abs(tgpos / gw));
+                // Math.abs(양수/음수) -> 절대값(양수로나옴)
+                // Math.round(소수자리수) -> 반올림!
+                console.log("나눈수:" + num);
+
+                /// 자기자리로 돌아기기!
+                $(".gdsec>ul").animate({
+                    left: (num * -100) + "%"
+                    // num*-100 의 결과는 0, -100, -200 중 하나!
+                }, 400);
+
+
+            } ////// else ////////////////////
+
+
+        }); /// 마우스이벤트 함수 //////////////////
+
+
+        // 위치값 셋팅 /////////////////////
+        tgpos[0] = $("#blog").offset().top;
+        console.log("블로그영역위치값:" + tgpos[0]);
+
+
+    }); ///////////////// 로드구역 //////////////////
+///////////////////////////////////////////////
+
+
+//////////////////////////////////////////
+//////// 스크롤 이벤트 구역 /////////////////
+
+// 윈도우(보이는화면) 높이값
+var winH = $(window).height();
+// 보이는 화면의 반 또는 어떤 비율만큼 위치값에서 뺀다!
+
+// 위치값 변수(여러개의 위치를 담는 목적)
+var tgpos = [];
+
+$(window).scroll(function () {
+
+    // 현재 스크롤위치값
+    var scTop = $(this).scrollTop();
+    //console.log("스위:"+scTop);
+
+    // 블로그 영역 스크롤 액션!
+    if (scTop > tgpos[0] - winH / 2 &&
+        scTop < tgpos[0]) {
+        
+        console.log("움직여~!!!");
+        $(".bb1 h3").css({left:(120-50)+"%"});
+        $(".bb2 h3").css({left:(20-50)+"%"});
+        
+    } ///// if ///////////////////////
+    else if (scTop > tgpos[0] &&
+        scTop < tgpos[0]+200) {
+        
+        console.log("움직여~!!!");
+        $(".bb1 h3").css({left:(120-100)+"%"});
+        $(".bb2 h3").css({left:(20-100)+"%"});
+        
+    } ///// else if ///////////////////////
+    else{
+        $(".bb1 h3").css({left:(120)+"%"});
+        $(".bb2 h3").css({left:(20)+"%"});
+        
+    } ////// else ///////////////////
+
+
+}); ///////// scroll ///////////////////////
+///////////////////////////////////////////
