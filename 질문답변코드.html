@@ -10,9 +10,133 @@
     <script src="js/jquery-3.5.0.min.js"></script>
     <script src="js/jquery-ui.min.js"></script>
     <script src="js/main.js"></script>
+    <style>
+        .cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.77);
+            z-index: 9999;
+            display: none;
+        }
+
+        .mmenu {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .mmenu ul {
+            position: relative;
+            top: 15%;
+            width: 100%;
+        }
+
+        .mmenu ul li {
+            position: relative;
+            width: 100%;
+            font-size: 70px;
+            text-align: center;
+            line-height: 150px;
+            display: none;
+        }
+
+        .circ {
+            position: fixed;
+            top: 7%;
+            right: 7%;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #ff89ff;
+            z-index: 99999;
+            transition: all 1s ease-in;
+        }
+    </style>
+
+    <script>
+        $(function() {
+
+            $(".circ").click(function() {
+                //alert(555);
+                $(this).css({
+                    transform:"scale(200)"
+                });//// css ///////
+            }); //////// click ////////////
+
+
+
+
+            let sts = 1;
+
+            $(".cart").click(function() {
+                //alert(333);
+                if (sts) {
+                    $(".cover").fadeIn(500, function() {
+                        $(".mmenu").animate({
+                            width: "40%"
+                        }, 400, "easeInExpo", function() {
+                            //each(function(순번,요소자신){구현})
+                            $("li", this).each(function(idx, ele) {
+                                //ele전달변수는 this키워드와 동일!
+                                console.log("li순번:" + idx);
+                                $(ele).delay(200 * idx).fadeIn(400);
+
+                            }); ////// each //////////
+
+                        }); /// animate ///////
+                    }); //// fadeIn ///////////
+
+                } ////////// if ////////////////
+                else {
+                    $(".mmenu li").each(function(idx, ele) {
+                        //ele전달변수는 this키워드와 동일!
+                        console.log("li순번:" + idx);
+                        $(ele).delay(200 * idx).fadeTo(400, 0);
+
+                    }); ////// each //////////
+
+
+                    $(".mmenu").delay(1500).animate({
+                        width: "0%"
+                    }, 400, "easeInExpo", function() {
+                        $(".cover").fadeOut(500);
+                    }); /// animate ////////////
+
+                } ////// else ////////////////
+
+                // 상태전환!
+                sts ? sts = 0 : sts = 1;
+                console.log("전환상태:" + sts);
+
+            }); ////// click ///////////
+
+        }); ///// jQB /////////////
+    </script>
 </head>
 
 <body>
+    <div class="circ"></div>
+    <div class="cover">
+        <div class="mmenu">
+
+            <ul>
+                <li>menu1</li>
+                <li>menu2</li>
+                <li>menu3</li>
+                <li>menu4</li>
+                <li>menu5</li>
+            </ul>
+
+
+        </div>
+    </div>
     <!--1.상단영역(header.top/100%*80)-->
     <div id="top">
         <header class="top inbox">
@@ -65,10 +189,6 @@
         </header>
     </div>
 
-   <!--1.5.상단 무빙레터1-->
-    <div class="stg1"></div>
-    
-   
     <!--2.배너영역(section.ban/1200*500)-->
     <div id="ban">
         <section class="ban inbox">
@@ -83,9 +203,6 @@
 
         </section>
     </div>
-    
-   <!--2.5.상단 무빙레터2-->
-    <div class="stg2"></div>
 
     <!--3.상품리스트영역(section.glist/1200*2000)-->
     <div id="glist">
