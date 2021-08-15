@@ -94,7 +94,7 @@ $(function(){//jQB////////////////////////
 			{
 				$.post(
 					// 1.전송할 페이지주소
-					"http://saveweb.dothome.co.kr/SMTP/Sendmail.php",
+					"https://saveweb.dothome.co.kr/SMTP/Sendmail.php",
 					// 2.전송할 데이터
 					{
 						"nm": nm, // 이름
